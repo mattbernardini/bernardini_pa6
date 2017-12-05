@@ -11,7 +11,7 @@ int main (int argc, char *argv[]) {
     return 1;
   }
   printf("argc: %d", argc);
-  scanf("%s", s);
+  fgets(s, 256, stdin);
   printf("%s", s);
   /*
   // Declare variables to be used in the rest of the program
