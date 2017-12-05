@@ -9,7 +9,7 @@ int main (int argc, char *argv[]) {
     fprintf(stderr, "Usage: %s processes\n", argv[0]);
     return 1;
   }
-  fprint("argc: %d", argc);
+  printf("argc: %d", argc);
   /*
   // Declare variables to be used in the rest of the program
   pid_t cpid;
