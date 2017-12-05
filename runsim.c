@@ -4,12 +4,15 @@
 
 int pr_count;
 int main (int argc, char *argv[]) {
+  char s[256];
   // Check for valid number of command-line arguments
   if (argc != 2){ 
     fprintf(stderr, "Usage: %s processes\n", argv[0]);
     return 1;
   }
   printf("argc: %d", argc);
+  scanf("%s", s);
+  printf("%s", s);
   /*
   // Declare variables to be used in the rest of the program
   pid_t cpid;
