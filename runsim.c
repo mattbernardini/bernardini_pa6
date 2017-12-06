@@ -1,24 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-
-int pr_count;
+#define MAX_COMMAND_SIZE = 256
 int main (int argc, char *argv[]) {
-  char s[256];
+
   // Check for valid number of command-line arguments
   if (argc != 2){ 
     fprintf(stderr, "Usage: %s processes\n", argv[0]);
     return 1;
   }
-  printf("argc: %d", argc);
-  fgets(s, 256, stdin);
-  printf("%s", s);
-  /*
+
   // Declare variables to be used in the rest of the program
   pid_t cpid;
   int shmId,i,pr_limit,*shmPtr;
   key_t key;
-  FILE *fp;
+  char command[MAX_COMMAND_SIZE];
 
   // Allocate shared memory to store the number of running processes
   (shmId = shmget(key, sizeof(int), IPC_CREAT | 0666));
@@ -27,33 +23,9 @@ int main (int argc, char *argv[]) {
   // Set the number of concurrent processes to let run
   pr_limit = atoi(argv[1]);
 
-
-  for (int i = 1; i < n; i++)
-    int childpid = fork()
-    switch (childpid)
-    {
-      case -1:
-      {
-          printf("Error\n");
-          exit(255);
-      }
-      case 0:
-      {
-        exec()
-
-        children = children - 1;
-        if (children < 0) children = 0;
-
-        exit(1);
-      }
-      default:
-      {   
-        if (children > pr_limit)
-            wait();
-        children++;
-
-        pid = fork();
-      }
+  while (fgets(command, MAX_COMMAND_SIZE, stdin) != EOF) {
+    printf("%s\n", command);
+  }
 
   fprintf(stderr, "i:%d process ID:%ld parent ID:%ld child ID:%ld\n",
                         i, getpid(), getppid(), childpid);
