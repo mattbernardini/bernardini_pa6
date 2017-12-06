@@ -40,8 +40,9 @@ int main (int argc, char *argv[]) {
       }
     } else {
       // Child process
+      char ** splitCommand = str_split(command, " ");
       pr_current++;
-      execl("./testsim", command, (char*) NULL);
+      execl("./testsim", strtok(command, " "), strtok(command, " ") strtok(command, " "), (char*) NULL);
       pr_current--;
     }
   }
