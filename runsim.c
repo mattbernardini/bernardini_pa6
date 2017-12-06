@@ -19,7 +19,7 @@ int main (int argc, char *argv[]) {
 
   // Declare variables to be used in the rest of the program
   pid_t cpid;
-  int shmId,i,pr_limit,*shmPtr;
+  int shmId,i,pr_limit,*shmPtr, childpid;
   key_t key;
   char command[MAX_COMMAND_SIZE];
 
