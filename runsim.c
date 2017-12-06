@@ -40,7 +40,6 @@ int main (int argc, char *argv[]) {
       }
     } else {
       // Child process
-      char ** splitCommand = str_split(command, " ");
       pr_current++;
       execl("./testsim", "10", "8", (char*) NULL);
       pr_current--;
