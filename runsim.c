@@ -26,6 +26,7 @@ int main (int argc, char *argv[]) {
   // Allocate shared memory to store the number of running processes
   shmId = shmget(key, sizeof(int), IPC_CREAT | 0666);
   pr_current = (int *) shmat( shmId, NULL, 0);
+  pr_current = 0;
 
   // Set the number of concurrent processes to let run
   pr_limit = atoi(argv[1]);
