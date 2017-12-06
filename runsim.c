@@ -42,7 +42,6 @@ int main (int argc, char *argv[]) {
       // Child process
       pr_current++;
       execl("./testsim", command, (char*) NULL);
-      wait();
       pr_current--;
     }
   }
