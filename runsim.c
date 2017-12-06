@@ -19,19 +19,31 @@ int main (int argc, char *argv[]) {
 
   // Declare variables to be used in the rest of the program
   pid_t cpid;
-  int shmId,i,pr_limit,*shmPtr, childpid;
+  int shmId,i,pr_limit,*pr_current, childpid;
   key_t key;
   char command[MAX_COMMAND_SIZE];
 
   // Allocate shared memory to store the number of running processes
-  (shmId = shmget(key, sizeof(int), IPC_CREAT | 0666));
-  shmPtr = (int *) shmat( shmId, NULL, 0);
+  shmId = shmget(key, sizeof(int), IPC_CREAT | 0666);
+  pr_current = (int *) shmat( shmId, NULL, 0);
 
   // Set the number of concurrent processes to let run
   pr_limit = atoi(argv[1]);
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
-    printf("%s\n", command);
+    // Handle error
+    if (pr_current >= pr_limit) {
+      wait();
+    }
+    if ((childpid = fork()) != 0) {
+      // Parent
+    } else {
+      // Child process
+      pr_current++
+      execl("./testsim", command, (char*) NULL);
+      wait();
+      pr_current--;
+    }
   }
 
   fprintf(stderr, "i:%d process ID:%ld parent ID:%ld child ID:%ld\n",
