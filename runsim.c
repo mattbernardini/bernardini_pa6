@@ -1,7 +1,14 @@
+#define _XOPEN_SOURCE
+#define MAX_COMMAND_SIZE 256
+
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
-#define MAX_COMMAND_SIZE = 256
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#include <sys/wait.h>
+
 int main (int argc, char *argv[]) {
 
   // Check for valid number of command-line arguments
@@ -28,8 +35,7 @@ int main (int argc, char *argv[]) {
   }
 
   fprintf(stderr, "i:%d process ID:%ld parent ID:%ld child ID:%ld\n",
-                        i, getpid(), getppid(), childpid);
-  */                      
+                        i, getpid(), getppid(), childpid);                      
   return 0;
 }
 /*
