@@ -32,14 +32,15 @@ int main (int argc, char *argv[]) {
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
     // Handle error
-    if (pr_current >= pr_limit) {
-      wait();
-    }
+
     if ((childpid = fork()) != 0) {
       // Parent
+      if (pr_current >= pr_limit) {
+        wait(childpid);
+      }
     } else {
       // Child process
-      pr_current++
+      pr_current++;
       execl("./testsim", command, (char*) NULL);
       wait();
       pr_current--;
