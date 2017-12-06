@@ -33,12 +33,14 @@ int main (int argc, char *argv[]) {
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
     // Handle error
+
     childpid = fork();
+    if (pr_current >= pr_limit & childpid != 0) {
+        wait(childpid);
+    }
     if (childpid != 0) {
       // Parent
-      if (pr_current >= pr_limit) {
-        wait(childpid);
-      }
+
     } else {
       // Child process
       *pr_current++;
