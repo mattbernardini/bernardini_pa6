@@ -42,7 +42,7 @@ int main (int argc, char *argv[]) {
       // Child process
       char ** splitCommand = str_split(command, " ");
       pr_current++;
-      execl("./testsim", strtok(command, " "), strtok(command, " ") strtok(command, " "), (char*) NULL);
+      execl("./testsim", "10", "8", (char*) NULL);
       pr_current--;
     }
   }
