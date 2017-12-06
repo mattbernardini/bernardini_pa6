@@ -30,7 +30,7 @@ int main (int argc, char *argv[]) {
   // Set the number of concurrent processes to let run
   pr_limit = atoi(argv[1]);
 
-  while (fgets(command, MAX_COMMAND_SIZE, stdin) != EOF) {
+  while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
     printf("%s\n", command);
   }
 
