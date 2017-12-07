@@ -47,7 +47,6 @@ int main (int argc, char *argv[]) {
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
 
     }
-    *pr_current -= 1;
     if (*pr_current >= pr_limit & childpid != 0) {
         cpid = wait(NULL);
       }
