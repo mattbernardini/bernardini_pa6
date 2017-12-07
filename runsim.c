@@ -37,18 +37,16 @@ int main (int argc, char *argv[]) {
     childpid = fork();
     if (childpid != 0) {
       *pr_current += 1;
-      // Parent
       wait(childpid);
-      *pr_current -= 1;
+      // Parent
       if (*pr_current >= pr_limit & childpid != 0) {
 
       }
-
     } else {
       // Child process
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
-
+      *pr_current -= 1;
     }
   }
 
