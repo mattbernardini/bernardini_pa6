@@ -48,7 +48,7 @@ int main (int argc, char *argv[]) {
     } else {
       // Child process
       printf("%d\n", *pr_current);
-      *pr_current++;
+      *pr_current += 1;
       execl("./testsim", "./testsim", "1", "1", (char*) NULL);
 
     }
