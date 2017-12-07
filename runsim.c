@@ -35,10 +35,7 @@ int main (int argc, char *argv[]) {
     // Handle error
 
     childpid = fork();
-    if (*pr_current >= pr_limit) {
-      wait(childpid);
-      *pr_current--;
-    }
+    *pr_current += 1;
     if (childpid != 0) {
       // Parent
       if (*pr_current >= pr_limit & childpid != 0) {
@@ -48,7 +45,6 @@ int main (int argc, char *argv[]) {
     } else {
       // Child process
       printf("%d\n", *pr_current);
-      *pr_current += 1;
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
 
     }
