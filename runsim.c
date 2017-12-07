@@ -39,16 +39,18 @@ int main (int argc, char *argv[]) {
       *pr_current += 1;
 
       // Parent
-      if (*pr_current >= pr_limit & childpid != 0) {
-        wait(childpid);
-      }
-      *pr_current -= 1;
+
+
     } else {
       // Child process
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
 
     }
+    *pr_current -= 1;
+    if (*pr_current >= pr_limit & childpid != 0) {
+        cpid = wait(NULL);
+      }
   }
 
   fprintf(stderr, "i:%d process ID:%ld parent ID:%ld child ID:%ld\n",
