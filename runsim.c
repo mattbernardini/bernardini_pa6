@@ -35,12 +35,14 @@ int main (int argc, char *argv[]) {
     // Handle error
 
     childpid = fork();
-    *pr_current += 1;
     if (childpid != 0) {
+      *pr_current += 1;
       // Parent
       if (*pr_current >= pr_limit & childpid != 0) {
         wait(childpid);
         *pr_current--;
+      } else {
+        
       }
     } else {
       // Child process
