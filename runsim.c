@@ -35,7 +35,7 @@ int main (int argc, char *argv[]) {
     // Handle error
 
     childpid = fork();
-    if (pr_current >= pr_limit & childpid != 0) {
+    if (*pr_current >= pr_limit & childpid != 0) {
         wait(childpid);
     }
     if (childpid != 0) {
