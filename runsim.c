@@ -38,9 +38,10 @@ int main (int argc, char *argv[]) {
     if (childpid != 0) {
       *pr_current += 1;
       // Parent
+      wait(childpid);
+      *pr_current -= 1;
       if (*pr_current >= pr_limit & childpid != 0) {
-        wait(childpid);
-        *pr_current -= 1;
+
       }
 
     } else {
