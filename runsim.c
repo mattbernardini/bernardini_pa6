@@ -40,7 +40,9 @@ int main (int argc, char *argv[]) {
     }
     if (childpid != 0) {
       // Parent
-
+      if (*pr_current >= pr_limit & childpid != 0) {
+          wait(childpid);
+      }
     } else {
       // Child process
       *pr_current++;
