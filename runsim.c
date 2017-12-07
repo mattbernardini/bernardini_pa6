@@ -49,7 +49,7 @@ int main (int argc, char *argv[]) {
       // Child process
       printf("%d\n", *pr_current);
       *pr_current += 1;
-      execl("./testsim", "./testsim", "1", "1", (char*) NULL);
+      execl("./testsim", "./testsim", "3", "1", (char*) NULL);
 
     }
   }
