@@ -40,8 +40,9 @@ int main (int argc, char *argv[]) {
       // Parent
       if (*pr_current >= pr_limit & childpid != 0) {
         wait(childpid);
+        *pr_current -= 1;
       }
-      *pr_current--;
+
     } else {
       // Child process
       printf("%d\n", *pr_current);
