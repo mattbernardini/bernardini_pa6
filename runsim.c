@@ -36,8 +36,7 @@ int main (int argc, char *argv[]) {
     int i = 0;
     split=strtok(command, " ");
     while (split != NULL){
-      command = split;
-      printf("%s\n", command);
+      printf("%s\n", split);
       split=strtok(NULL, " ");
     }
     // Handle error
