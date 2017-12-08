@@ -43,8 +43,7 @@ int main (int argc, char *argv[]) {
     } else {
       // Child process
       char *commandList;
-      commandList = strdupa(command);
-      printf("%s\n", strcat("./", strsep(commandList, " "));
+      printf("%s\n", strcat("./", strsep(command, " "));
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
     }
