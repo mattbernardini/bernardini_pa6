@@ -42,7 +42,7 @@ int main (int argc, char *argv[]) {
       // Parent
     } else {
       // Child process
-      char *commandList = strsep(command, " ")
+      char *commandList = strsep(command, " ");
       printf("%s\n", strcat("./", commandList));
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
