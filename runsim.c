@@ -42,7 +42,6 @@ int main (int argc, char *argv[]) {
       strcpy(formattedCommand, "./");
       char *commandList = strtok(command, " ");
       strcat(formattedCommand, commandList);
-      printf("%s\n", formattedCommand);
       char *length1 = strtok(NULL, " ");
       char *length2 = strtok(NULL, " ");
       printf("%d\n", *pr_current);
