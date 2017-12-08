@@ -43,7 +43,6 @@ int main (int argc, char *argv[]) {
       char *commandList = strtok(command, " ");
       strcat(formattedCommand, commandList);
       printf("%s\n", formattedCommand);
-      char *testing = str
       char *length1 = strtok(NULL, " ");
       char *length2 = strtok(NULL, " ");
       printf("%d\n", *pr_current);
