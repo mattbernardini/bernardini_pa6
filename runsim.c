@@ -46,7 +46,7 @@ int main (int argc, char *argv[]) {
       char *length1 = strtok(NULL, " ");
       char *length2 = strtok(NULL, " ");
       printf("%d\n", *pr_current);
-      execl("./testsim", "./testsim", "3", "1", (char*) NULL);
+      execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
     }
     if (*pr_current >= pr_limit & childpid != 0) {
         cpid = wait(NULL);
