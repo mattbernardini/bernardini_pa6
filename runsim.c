@@ -32,11 +32,12 @@ int main (int argc, char *argv[]) {
   pr_limit = atoi(argv[1]);
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
-    char **command;
+    char *command;
     int i = 0;
     split=strtok(command, " ");
     while (split != NULL){
-      command[i++] = split;
+      command = split;
+      printf("%s\n", command);
       split=strtok(NULL, " ");
     }
     // Handle error
@@ -63,6 +64,7 @@ int main (int argc, char *argv[]) {
                         i, getpid(), getppid(), childpid);                      
   return 0;
 }
+
 /*
 #define _XOPEN_SOURCE
 #include <stdio.h>
