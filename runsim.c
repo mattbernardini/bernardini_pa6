@@ -50,7 +50,6 @@ int main (int argc, char *argv[]) {
       char *length1 = strtok(NULL, " ");
       char *length2 = strtok(NULL, " ");
       // Execute
-      printf("%d\n", *pr_current);
       execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
       exit(42);
       *pr_current -= 1;
@@ -58,7 +57,7 @@ int main (int argc, char *argv[]) {
     // Check to make sure we do not have more than enough running processes
     if (*pr_current >= pr_limit & childpid != 0) {
         cpid = wait(&status);
-        printf("%d\n", status);
+        printf("Exit status: %u\n", status);
       }
   }               
   return 0;
