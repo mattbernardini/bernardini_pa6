@@ -78,7 +78,7 @@ int main (int argc, char *argv[]) {
     exit(EXIT_FAILURE);
   }
   if (WIFEXITED(status)) {
-    printf("exited, status=%d\n", WEXITSTATUS(status));
+    printf("exited, status=%d\n", status);
   } else if (WIFSIGNALED(status)) {
     printf("killed by signal %d\n", WTERMSIG(status));
   } else if (WIFSTOPPED(status)) {
