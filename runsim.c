@@ -31,19 +31,19 @@ int main (int argc, char *argv[]) {
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
     // Handle error
-    char *commandList = strtok(command, " ");
-    printf("%s\n", commandList);
-    commandList = strtok(NULL, " ");
-    printf("%s\n", commandList);
-    commandList = strtok(NULL, " ");
-    printf("%s\n", commandList);
+
     childpid = fork();
     if (childpid != 0) {
       *pr_current += 1;
       // Parent
     } else {
       // Child process
-
+      char *commandList = strtok(command, " ");
+      printf("%s\n", commandList);
+      commandList = strtok(NULL, " ");
+      printf("%s\n", commandList);
+      commandList = strtok(NULL, " ");
+      printf("%s\n", commandList);
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
     }
