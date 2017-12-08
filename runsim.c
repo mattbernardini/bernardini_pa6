@@ -56,7 +56,7 @@ int main (int argc, char *argv[]) {
     }
     // Check to make sure we do not have more than enough running processes
     if (*pr_current >= pr_limit & childpid != 0) {
-        cpid = waitpid(-1, &status);
+        cpid = waitpid(-1, &status, WUNTRACED | WCONTINUED);
         if (cpid == -1) {
           perror("waitpid");
           exit(EXIT_FAILURE);
