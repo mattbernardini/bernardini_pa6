@@ -32,8 +32,15 @@ int main (int argc, char *argv[]) {
   pr_limit = atoi(argv[1]);
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
+    char **command;
+    int i = 0;
+    split=strtok(command, " ");
+    while (split != NULL){
+      command[i++] = split;
+      split=strtok(NULL, " ");
+    }
     // Handle error
-
+    
     childpid = fork();
     if (childpid != 0) {
       *pr_current += 1;
