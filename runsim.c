@@ -38,12 +38,14 @@ int main (int argc, char *argv[]) {
       // Parent
     } else {
       // Child process
+      char formattedCommand[MAX_COMMAND_SIZE];
+      strcpy(formattedCommand, "./");
       char *commandList = strtok(command, " ");
-      printf("%s\n", commandList);
-      commandList = strtok(NULL, " ");
-      printf("%s\n", commandList);
-      commandList = strtok(NULL, " ");
-      printf("%s\n", commandList);
+      strcat(formattedCommand, commandList);
+      printf("%s\n", formattedCommand);
+      char *testing = str
+      char *length1 = strtok(NULL, " ");
+      char *length2 = strtok(NULL, " ");
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
     }
