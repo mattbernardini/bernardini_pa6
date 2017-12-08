@@ -34,10 +34,10 @@ int main (int argc, char *argv[]) {
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
     char *command;
     int i = 0;
-    split=strtok(command, " ");
-    while (split != NULL){
-      printf("%s\n", split);
-      split=strtok(NULL, " ");
+    command = strtok (command, " ");
+    while (command != NULL){
+      printf("%s\n", command);
+      command = strtok(NULL, " ");
     }
     // Handle error
     
