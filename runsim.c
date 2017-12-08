@@ -32,24 +32,16 @@ int main (int argc, char *argv[]) {
   pr_limit = atoi(argv[1]);
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
-    char *individualCommand;
-    int i = 0;
-    individualCommand = strtok (command, " ");
-    while (individualCommand != NULL){
-      printf("%s\n", individualCommand);
-      individualCommand = strtok(NULL, " ");
-    }
+    char individualCommand[MAX_COMMAND_SIZE];
     // Handle error
     
     childpid = fork();
     if (childpid != 0) {
       *pr_current += 1;
-
       // Parent
-
-
     } else {
       // Child process
+      printf("%s\n", command);
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
 
