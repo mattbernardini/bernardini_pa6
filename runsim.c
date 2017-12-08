@@ -32,7 +32,6 @@ int main (int argc, char *argv[]) {
   pr_limit = atoi(argv[1]);
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
-    printf("%s\n", command);
     // Handle error
     
     childpid = fork();
