@@ -56,9 +56,20 @@ int main (int argc, char *argv[]) {
     }
     // Check to make sure we do not have more than enough running processes
     if (*pr_current >= pr_limit & childpid != 0) {
-        cpid = wait(&status);
-        const int es = WEXITSTATUS(status);
-        printf("Exit status: %u\n", es);
+        cpid = waitpid(-1, &status);
+        if (cpid == -1) {
+          perror("waitpid");
+          exit(EXIT_FAILURE);
+        }
+        if (WIFEXITED(status)) {
+          printf("exited, status=%d\n", WEXITSTATUS(status));
+        } else if (WIFSIGNALED(status)) {
+          printf("killed by signal %d\n", WTERMSIG(status));
+        } else if (WIFSTOPPED(status)) {
+          printf("stopped by signal %d\n", WSTOPSIG(status));
+        } else if (WIFCONTINUED(status)) {
+          printf("continued\n");
+        }
       }
   }               
   return 0;
