@@ -32,12 +32,12 @@ int main (int argc, char *argv[]) {
   pr_limit = atoi(argv[1]);
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
-    char *command;
+    char *individualCommand;
     int i = 0;
-    command = strtok (command, " ");
-    while (command != NULL){
-      printf("%s\n", command);
-      command = strtok(NULL, " ");
+    individualCommand = strtok (command, " ");
+    while (individualCommand != NULL){
+      printf("%s\n", individualCommand);
+      individualCommand = strtok(NULL, " ");
     }
     // Handle error
     
