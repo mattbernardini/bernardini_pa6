@@ -10,6 +10,7 @@
 #include <sys/shm.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <stddef.h>
 int main (int argc, char *argv[]) {
 
   // Check for valid number of command-line arguments
