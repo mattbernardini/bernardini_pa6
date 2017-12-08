@@ -29,7 +29,8 @@ int main (int argc, char *argv[]) {
   shmId = shmget(key, sizeof(int), IPC_CREAT | 0666);
   pr_current = (int *) shmat( shmId, NULL, 0);
   *pr_current = 0;
-
+  char *commandList = strsep(command, " ");
+  printf("%s\n", commandList);
   // Set the number of concurrent processes to let run
   pr_limit = atoi(argv[1]);
 
@@ -42,8 +43,7 @@ int main (int argc, char *argv[]) {
       // Parent
     } else {
       // Child process
-      char *commandList = strsep(command, " ");
-      printf("%s\n", commandList);
+
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
     }
