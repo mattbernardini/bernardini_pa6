@@ -51,6 +51,8 @@ int main (int argc, char *argv[]) {
       char *length2 = strtok(NULL, " ");
       // Execute
       execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
+      exit(42);
+      *pr_current -= 1;
     }
     // Check to make sure we do not have more than enough running processes
     if (*pr_current >= pr_limit & childpid != 0) {
