@@ -43,7 +43,7 @@ int main (int argc, char *argv[]) {
     } else {
       // Child process
       char *commandList = strsep(command, " ");
-      printf("%s\n", strcat("./", commandList));
+      printf("%s\n", commandList);
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
     }
