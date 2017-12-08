@@ -48,7 +48,7 @@ int main (int argc, char *argv[]) {
 
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
-      exit(1)
+      exit(1);
 
     }
     if (*pr_current >= pr_limit & childpid != 0) {
