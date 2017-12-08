@@ -57,7 +57,8 @@ int main (int argc, char *argv[]) {
     // Check to make sure we do not have more than enough running processes
     if (*pr_current >= pr_limit & childpid != 0) {
         cpid = wait(&status);
-        printf("Exit status: %u\n", status);
+        const int es = WEXITSTATUS(status);
+        printf("Exit status: %u\n", es);
       }
   }               
   return 0;
