@@ -11,6 +11,7 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <stddef.h>
+
 int main (int argc, char *argv[]) {
   // Check for valid number of command-line arguments
   if (argc != 2){ 
@@ -26,33 +27,35 @@ int main (int argc, char *argv[]) {
   shmId = shmget(key, sizeof(int), IPC_CREAT | 0666);
   pr_current = (int *) shmat( shmId, NULL, 0);
   *pr_current = 0;
+
   // Set the number of concurrent processes to let run
   pr_limit = atoi(argv[1]);
 
+  // Main loop
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
     // Handle error
 
     childpid = fork();
     if (childpid != 0) {
+      // In the parent process
       *pr_current += 1;
-      // Parent
     } else {
       // Child process
+      // Format command
       char formattedCommand[MAX_COMMAND_SIZE];
       strcpy(formattedCommand, "./");
       char *commandList = strtok(command, " ");
       strcat(formattedCommand, commandList);
+      // Get lengths of time
       char *length1 = strtok(NULL, " ");
       char *length2 = strtok(NULL, " ");
-      printf("%d\n", *pr_current);
+      // Execute
       execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
     }
+    // Check to make sure we do not have more than enough running processes
     if (*pr_current >= pr_limit & childpid != 0) {
         cpid = wait(NULL);
       }
-  }
-
-  fprintf(stderr, "i:%d process ID:%ld parent ID:%ld child ID:%ld\n",
-                        i, getpid(), getppid(), childpid);                      
+  }               
   return 0;
 }
