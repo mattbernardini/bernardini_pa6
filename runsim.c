@@ -31,7 +31,7 @@ int main (int argc, char *argv[]) {
 
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
     // Handle error
-    char *commandList = strsep(command, " ");
+    char *commandList = strtok(command, " ");
     printf("%s\n", commandList);
     childpid = fork();
     if (childpid != 0) {
