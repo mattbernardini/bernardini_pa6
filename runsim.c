@@ -33,6 +33,10 @@ int main (int argc, char *argv[]) {
     // Handle error
     char *commandList = strtok(command, " ");
     printf("%s\n", commandList);
+    commandList = strtok(command, " ");
+    printf("%s\n", commandList);
+    commandList = strtok(command, " ");
+    printf("%s\n", commandList);
     childpid = fork();
     if (childpid != 0) {
       *pr_current += 1;
