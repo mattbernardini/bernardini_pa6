@@ -50,6 +50,7 @@ int main (int argc, char *argv[]) {
       char *length1 = strtok(NULL, " ");
       char *length2 = strtok(NULL, " ");
       // Execute
+      printf("%d\n", pr_current);
       execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
       exit(42);
       *pr_current -= 1;
