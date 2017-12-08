@@ -35,21 +35,14 @@ int main (int argc, char *argv[]) {
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
     // Handle error
     
-    childpid = vfork();
+    childpid = fork();
     if (childpid != 0) {
       *pr_current += 1;
       // Parent
-      if (*pr_current > 2) {
-        childpid = wait(&status);
-      }
     } else {
       // Child process
-
-
       printf("%d\n", *pr_current);
       execl("./testsim", "./testsim", "3", "1", (char*) NULL);
-      exit(1);
-
     }
     if (*pr_current >= pr_limit & childpid != 0) {
         cpid = wait(NULL);
@@ -60,35 +53,3 @@ int main (int argc, char *argv[]) {
                         i, getpid(), getppid(), childpid);                      
   return 0;
 }
-
-/*
-#define _XOPEN_SOURCE
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include<sys/wait.h>
-
-int main() {
-  pid_t cpid;
-  int shmId,i;
-  key_t key;
-  int *shmPtr;
-  const int SIZE = 10;
-  (shmId = shmget(key, sizeof(int), IPC_CREAT | 0666));
-  shmPtr = (int *) shmat( shmId, NULL, 0);
-  *shmPtr = 10;
-  int pid = fork();
-  if (pid == 0) {
-    *shmPtr = 1;
-    exit(0);
-  }
-  cpid= wait(NULL);
-  printf("%d\n", *shmPtr);
-  shmdt(shmPtr);
-  shmctl(shmId,IPC_RMID,NULL);
-  return 0;
-}
-*/
