@@ -52,11 +52,11 @@ int main (int argc, char *argv[]) {
       // Execute
       execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
       exit(42);
-      *pr_current -= 1;
     }
     // Check to make sure we do not have more than enough running processes
     if (*pr_current >= pr_limit & childpid != 0) {
         cpid = waitpid(-1, &status, WUNTRACED | WCONTINUED);
+        *pr_current -= 1;
         if (cpid == -1) {
           perror("waitpid");
           exit(EXIT_FAILURE);
@@ -73,6 +73,7 @@ int main (int argc, char *argv[]) {
       }
   }
   cpid = waitpid(-1, &status, WUNTRACED | WCONTINUED);
+  *pr_current -= 1;
   if (cpid == -1) {
     perror("waitpid");
     exit(EXIT_FAILURE);
