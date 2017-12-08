@@ -1,3 +1,11 @@
+/**
+ * Matt Bernardini
+ * cs2750 PA 6
+ * 12/08/2017
+ * 
+ * runsim.c
+*/
+
 #define _XOPEN_SOURCE
 #define MAX_COMMAND_SIZE 256
 

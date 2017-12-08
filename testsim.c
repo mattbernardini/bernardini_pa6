@@ -1,4 +1,10 @@
-/* testsim.c */
+/**
+ * Matt Bernardini
+ * cs2750 PA 6
+ * 12/08/2017
+ * 
+ * testsim.c
+ * */
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
