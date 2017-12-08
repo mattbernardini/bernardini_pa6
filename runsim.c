@@ -58,7 +58,7 @@ int main (int argc, char *argv[]) {
     // Check to make sure we do not have more than enough running processes
     if (*pr_current >= pr_limit & childpid != 0) {
         cpid = wait(&status);
-        printf("%d\n", status)
+        printf("%d\n", status);
       }
   }               
   return 0;
