@@ -1,7 +1,7 @@
 /**
  * Matt Bernardini
- * cs2750 PA 6
- * 12/08/2017
+ * cs4760 HW1
+ * 2/08/2017
  * 
  * runsim.c
 */
@@ -19,30 +19,40 @@
 #include <sys/wait.h>
 #include <string.h>
 #include <stddef.h>
-
+#include <getopt.h>
+void handleOpts(int argc, char ** argv);
+static int pr_limit;
 int main (int argc, char *argv[]) {
-  // Check for valid number of command-line arguments
-  if (argc != 2){ 
-    fprintf(stderr, "Usage: %s processes\n", argv[0]);
-    return 1;
-  }
+  int opt = 0;
   // Declare variables to be used in the rest of the program
   pid_t cpid;
-  int shmId,i,pr_limit,*pr_current, childpid, status;
+  int shmId,i,*pr_current, childpid, status;
   key_t key;
   char command[MAX_COMMAND_SIZE];
   // Allocate shared memory to store the number of running processes
   shmId = shmget(key, sizeof(int), IPC_CREAT | 0666);
   pr_current = (int *) shmat( shmId, NULL, 0);
   *pr_current = 0;
-
-  // Set the number of concurrent processes to let run
-  pr_limit = atoi(argv[1]);
+  // Check for valid number of command-line arguments
+  if (argc != 2){ 
+    fprintf(stderr, "%s: Usage: -n [number of processes]\n", argv[0]);
+    return 1;
+  } else {
+    while ((opt = getopt(argc, argv, "n:")) != -1) {
+      switch (opt){
+        case 'n':
+          pr_limit = atoi(optarg);
+          break;
+        default:
+          
+      }
+    }
+  }
 
   // Main loop
   while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
     // Handle error
-
+    printf("%s", command);
     childpid = fork();
     if (childpid != 0) {
       // In the parent process
@@ -96,4 +106,27 @@ int main (int argc, char *argv[]) {
     printf("continued\n");
   }         
   return 0;
+}
+
+void handleOpts(int argc, char ** argv) {
+  int ch;
+  if (argc != 2){ 
+    fprintf(stderr, "%s: Usage: -n [number of processes]\n", argv[0]);
+    exit(-1);
+  } else {
+    while ((ch = getopt(argc, argv, "nh:")) != -1) {
+      switch (ch){
+        case 'n':
+          pr_limit = atoi(optarg);
+          break;
+        case 'h':
+          fprintf(stdout, "%s: Usage: -n [number of processes]\n", argv[0]);
+          exit(0);
+          break;
+        case '?':
+        default:
+
+      }
+    }
+  }
 }
