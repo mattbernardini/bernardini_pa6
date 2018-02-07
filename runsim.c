@@ -62,13 +62,8 @@
 #include <getopt.h>
 #endif
 
-#ifndef MAKEARGV_H
-#define MAKEARGV_H
-#include "makeargv.h"
-#endif
-
 static int FAN_COUNT = 0;
-static int MAX_COMMAND_SIZE = 256;
+#define MAX_COMMAND_SIZE 256
 
 void handleOpts(int argc, char ** argv);
 void fanProcesses();
@@ -98,20 +93,9 @@ int main (int argc, char *argv[]) {
     } else {
       // Child process
       // Format command
-      char formattedCommand[MAX_COMMAND_SIZE];
-      memset(formattedCommand, MAX_COMMAND_SIZE, '\0');
-      strcpy(formattedCommand, "./");
-      char *commandList = strtok(command, " ");
-      strcat(formattedCommand, commandList);
-      // Get lengths of time
-      char *length1 = strtok(NULL, " ");
-      char *length2 = strtok(NULL, " ");
-      // Execute
-      execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
-      exit(42);
     }
     // Check to make sure we do not have more than enough running processes
-    if (*pr_current >= FAN_COUNT & childpid != 0) {
+    if ((*pr_current >= FAN_COUNT) & (childpid != 0)) {
         cpid = waitpid(-1, &status, WUNTRACED | WCONTINUED);
         *pr_current -= 1;
         if (cpid == -1) {
@@ -175,10 +159,7 @@ void fanProcesses()
 {
     
     char commandBuffer[MAX_COMMAND_SIZE];
-    memset(commandBuffer, MAX_COMMAND_SIZE, '\0');
-    
     int childPids[FAN_COUNT], counter = 0;
-    memset(childPids, FAN_COUNT, 0);
     
     while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL) 
     {
@@ -190,22 +171,17 @@ void fanProcesses()
         else if (childPids[counter] == 0)
         {
             // Child process
-            char ** commands;
-            int numtokens;
-            if ((numtokens = makeargv(commandBuffer, " ", &commands)) == -1) 
-            {
-                fprintf(stderr,
-                        "Failed to make command line arguments array for %s\n",
-                        commandBuffer);
-            }
-            else 
-            {
-                // Valid arguments
-                for (int i = 0; i < numtokens; i++)
-                {
-                    fprintf(stdout, "%s\n", commands[i]);
-                }
-            }
+      	    char formattedCommand[MAX_COMMAND_SIZE];
+            memset(formattedCommand, MAX_COMMAND_SIZE, '\0');
+            strcpy(formattedCommand, "./");
+            char *commandList = strtok(command, " ");
+            strcat(formattedCommand, commandList);
+            // Get lengths of time
+            char *length1 = strtok(NULL, " ");
+            char *length2 = strtok(NULL, " ");
+            // Execute
+            execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
+            exit(42);
         }
     }
 }
