@@ -88,7 +88,7 @@ void handleOpts(int argc, char ** argv)
 {
     int ch;
     if (argc < 3) {        
-        fprintf(stderr, "%s: Usage: -n [number of processes]\n", argv[0]);
+        fprintf(stderr, "%s: Usage: -n [number of processes] -h recieve this message\n", argv[0]);
         exit(-1);
     }
     while ((ch = getopt(argc, argv, "n:h")) != -1) 
@@ -99,22 +99,37 @@ void handleOpts(int argc, char ** argv)
                 FAN_COUNT = atoi(optarg);
                 break;
             case 'h':
-                fprintf(stdout, "%s: Usage: -n [number of processes]\n", argv[0]);
+                fprintf(stderr, "%s: Usage: -n [number of processes] -h recieve this message\n", argv[0]);
                 exit(0);
                 break;
             case '?':
                 if (optopt == 'n')
+                {
                     fprintf(stderr, "Option -%c requires an argument [number of processes].\n", optopt);
+                    fprintf(stderr, "%s: Usage: -n [number of processes] -h recieve this message\n", argv[0]);
+                }
                 else if (isprint(optopt))
+                {
                     fprintf(stderr, "Unknown option '-%c'.\n", optopt);
+                    fprintf(stderr, "%s: Usage: -n [number of processes] -h recieve this message\n", argv[0]);
+                }
                 else
+                {
                     fprintf(stderr, "Unknown option character '\\x%x'.\n", optopt);
+                    fprintf(stderr, "%s: Usage: -n [number of processes] -h recieve this message\n", argv[0]);
+                }
                 exit(-1);
+                break;
             default:
                 perror("Unknown option selected");
                 exit(-1);
                 break;
         }
+    }
+    if (FAN_COUNT == -1) 
+    {
+        fprintf(stderr, "%s: Usage: -n [number of processes] -h recieve this message\n", argv[0]);
+        exit(-1);
     }
 }
 
