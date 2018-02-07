@@ -66,7 +66,7 @@ static int FAN_COUNT = 0;
 static int MAX_COMMAND_SIZE = 256;
 
 void handleOpts(int argc, char ** argv);
-long * fanProcesses();
+long int * fanProcesses();
 void handleWaits (long int * childPids, char ** argv);
 
 int main (int argc, char *argv[]) 
@@ -82,37 +82,31 @@ int main (int argc, char *argv[])
 void handleOpts(int argc, char ** argv) 
 {
     int ch;
-    if (argc != 2){ 
-        fprintf(stderr, "%s: Usage: -n [number of processes]\n", argv[0]);
-        exit(-1);
-    } 
-    else 
+    while ((ch = getopt(argc, argv, "n::h")) != -1) 
     {
-        while ((ch = getopt(argc, argv, "n::h")) != -1) 
+        switch (ch)
         {
-            switch (ch)
-            {
-                case 'n':
-                    FAN_COUNT = atoi(optarg);
-                    break;
-                case 'h':
-                    fprintf(stdout, "%s: Usage: -n [number of processes]\n", argv[0]);
-                    exit(0);
-                    break;
-                case '?':
-                default:
-                    perror("Unknown option selected");
-                    break;
-            }
+            case 'n':
+                FAN_COUNT = atoi(optarg);
+                break;
+            case 'h':
+                fprintf(stdout, "%s: Usage: -n [number of processes]\n", argv[0]);
+                exit(0);
+                break;
+            case '?':
+            default:
+                perror("Unknown option selected");
+                break;
         }
     }
 }
 
-long * fanProcesses() 
+long int * fanProcesses() 
 {
     
     char commandBuffer[MAX_COMMAND_SIZE];
-    long * childPids, counter = 0;
+    long int * childPids;
+    int counter = 0;
     childPids = (long *) malloc(sizeof(long) * FAN_COUNT);
     memset(childPids, 0, (size_t) FAN_COUNT);
     while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL && counter < FAN_COUNT) 
