@@ -63,7 +63,7 @@
 #endif
 
 static int FAN_COUNT = 0;
-#define MAX_COMMAND_SIZE 256
+static int MAX_COMMAND_SIZE = 256;
 
 void handleOpts(int argc, char ** argv);
 void fanProcesses();
@@ -131,28 +131,33 @@ int main (int argc, char *argv[]) {
   return 0;
 }
 
-void handleOpts(int argc, char ** argv) {
+void handleOpts(int argc, char ** argv) 
+{
     int ch;
     if (argc != 2){ 
-    fprintf(stderr, "%s: Usage: -n [number of processes]\n", argv[0]);
-    exit(-1);
-  } else {
-    while ((ch = getopt(argc, argv, "n::h")) != -1) {
-      switch (ch){
-        case 'n':
-          FAN_COUNT = atoi(optarg);
-          break;
-        case 'h':
-          fprintf(stdout, "%s: Usage: -n [number of processes]\n", argv[0]);
-          exit(0);
-          break;
-        case '?':
-        default:
-          perror((const char *)(long)errno);
-          break;
-      }
+        fprintf(stderr, "%s: Usage: -n [number of processes]\n", argv[0]);
+        exit(-1);
+    } 
+    else 
+    {
+        while ((ch = getopt(argc, argv, "n::h")) != -1) 
+        {
+            switch (ch)
+            {
+                case 'n':
+                    FAN_COUNT = atoi(optarg);
+                    break;
+                case 'h':
+                    fprintf(stdout, "%s: Usage: -n [number of processes]\n", argv[0]);
+                    exit(0);
+                    break;
+                case '?':
+                default:
+                    perror((const char *)(long)errno);
+                    break;
+            }
+        }
     }
-  }
 }
 
 void fanProcesses() 
@@ -172,9 +177,8 @@ void fanProcesses()
         {
             // Child process
       	    char formattedCommand[MAX_COMMAND_SIZE];
-            memset(formattedCommand, MAX_COMMAND_SIZE, '\0');
             strcpy(formattedCommand, "./");
-            char *commandList = strtok(command, " ");
+            char *commandList = strtok(commandBuffer, " ");
             strcat(formattedCommand, commandList);
             // Get lengths of time
             char *length1 = strtok(NULL, " ");
@@ -182,6 +186,10 @@ void fanProcesses()
             // Execute
             execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
             exit(42);
+        }
+        else 
+        {
+            counter += 1;
         }
     }
 }
