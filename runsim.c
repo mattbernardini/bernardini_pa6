@@ -71,14 +71,14 @@ static int FAN_COUNT = -1;
 static int MAX_COMMAND_SIZE = 256;
 
 void handleOpts(int argc, char ** argv);
-long int * fanProcesses();
-void handleWaits (long int * childPids, char ** argv);
+int * fanProcesses(char ** argv);
+void handleWaits (int * childPids, char ** argv);
 
 int main (int argc, char *argv[]) 
 {
-    long int * childPids;
+    int * childPids;
     handleOpts(argc, argv);
-    childPids = fanProcesses();
+    childPids = fanProcesses(argv);
     handleWaits(childPids, argv);
     free(childPids);
     return 0;
@@ -133,19 +133,20 @@ void handleOpts(int argc, char ** argv)
     }
 }
 
-long int * fanProcesses() 
+int * fanProcesses(char ** argv) 
 {
     
     char commandBuffer[MAX_COMMAND_SIZE];
-    long int * childPids;
+    int * childPids;
     int counter = 0;
-    childPids = (long *) malloc(sizeof(long) * FAN_COUNT);
-    memset(childPids, 0, (size_t) FAN_COUNT);
+    childPids = (int *) malloc(sizeof(int) * FAN_COUNT);
+    memset(childPids, 0, sizeof(childPids));
     while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL && counter < FAN_COUNT) 
     {
         childPids[counter] = fork();
         if (childPids[counter] == -1) 
         {
+            fprintf(stderr, "%s: Error: failed to fork a child process.\n", argv[0]);
             perror((const char *)(long)errno);
         }
         else if (childPids[counter] == 0)
