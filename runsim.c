@@ -64,7 +64,7 @@
 
 #ifndef CTYPES_H
 #define CTYPES_H
-#include <ctypes.h>
+#include <ctype.h>
 #endif
 
 static int FAN_COUNT = -1;
