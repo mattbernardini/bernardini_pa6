@@ -125,7 +125,8 @@ long * fanProcesses()
         else if (childPids[counter] == 0)
         {
             // Child process
-      	    char formattedCommand[MAX_COMMAND_SIZE];
+      	    int errorTestForExec = 0;
+            char formattedCommand[MAX_COMMAND_SIZE];
             strcpy(formattedCommand, "./");
             char *commandList = strtok(commandBuffer, " ");
             strcat(formattedCommand, commandList);
