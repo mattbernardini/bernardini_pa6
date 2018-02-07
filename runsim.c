@@ -170,6 +170,7 @@ void handleOpts(int argc, char ** argv) {
     }
   }
 }
+
 void fanProcesses() 
 {
     
