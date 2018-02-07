@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -ggdb -std=c99 -Wall -Werror
 TARGET = proc_fan
 TARGET2 = testsim
-OBJS = runsim.o 
+OBJS = runsim.o
 OBJS2 = testsim.o
 default: all
 all: $(TARGET) $(TARGET2)
