@@ -140,7 +140,7 @@ int * fanProcesses(char ** argv)
     int * childPids;
     int counter = 0;
     childPids = (int *) malloc(sizeof(int) * FAN_COUNT);
-    memset(childPids, 0, sizeof(childPids));
+    memset(childPids, 0, sizeof(&childPids));
     while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL && counter < FAN_COUNT) 
     {
         childPids[counter] = fork();
@@ -170,7 +170,7 @@ int * fanProcesses(char ** argv)
     }
     return childPids;
 }
-void handleWaits (long int * childPids, char ** argv)
+void handleWaits (int * childPids, char ** argv)
 {
     pid_t cpid;
     int numberOfPids = sizeof(childPids)/sizeof(childPids[0]), status = 0;
