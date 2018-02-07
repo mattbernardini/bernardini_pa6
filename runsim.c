@@ -67,11 +67,11 @@ static int MAX_COMMAND_SIZE = 256;
 
 void handleOpts(int argc, char ** argv);
 long * fanProcesses();
-void handleWaits (long * childPids, char ** argv);
+void handleWaits (long int * childPids, char ** argv);
 
 int main (int argc, char *argv[]) 
 {
-    long * childPids;
+    long int * childPids;
     handleOpts(argc, argv);
     childPids = fanProcesses();
     handleWaits(childPids, argv);
@@ -115,7 +115,7 @@ long * fanProcesses()
     long * childPids, counter = 0;
     childPids = (long *) malloc(sizeof(long) * FAN_COUNT);
     memset(childPids, 0, (size_t) FAN_COUNT);
-    while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULLi && counter < FAN_COUNT) 
+    while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL && counter < FAN_COUNT) 
     {
         childPids[counter] = fork();
         if (childPids[counter] == -1) 
@@ -125,7 +125,6 @@ long * fanProcesses()
         else if (childPids[counter] == 0)
         {
             // Child process
-      	    int errorTestForExec = 0;
             char formattedCommand[MAX_COMMAND_SIZE];
             strcpy(formattedCommand, "./");
             char *commandList = strtok(commandBuffer, " ");
@@ -144,10 +143,10 @@ long * fanProcesses()
     }
     return childPids;
 }
-void handleWaits (long * childPids, char ** argv)
+void handleWaits (long int * childPids, char ** argv)
 {
     pid_t cpid;
-    int numberOfPids = sizeof(childPids)/sizeof(childPids[0]);
+    int numberOfPids = sizeof(childPids)/sizeof(childPids[0]), status = 0;
     for (int i = 0; i < numberOfPids; i++) 
     {
         cpid = waitpid(childPids[i], &status, WUNTRACED | WCONTINUED);
@@ -162,15 +161,15 @@ void handleWaits (long * childPids, char ** argv)
         } 
         else if (WIFSIGNALED(status)) 
         {
-            fprintf(stderr, "%s: Error: Child Pid %d: killed by signal %d\n", argv[0], childPids[i], WTERMSIG(status));
+            fprintf(stderr, "%s: Error: Child Pid %ld: killed by signal %d\n", argv[0], childPids[i], WTERMSIG(status));
         } 
         else if (WIFSTOPPED(status)) 
         {
-            fprintf(stderr, "%s: Error: Child Pid %d: stopped by signal %d\n",argv[0], childPids[i], WSTOPSIG(status));
+            fprintf(stderr, "%s: Error: Child Pid %ld: stopped by signal %d\n",argv[0], childPids[i], WSTOPSIG(status));
         } 
         else if (WIFCONTINUED(status)) 
         {
-            fprintf(stdout, "%s: Child Pid %d: continued\n", argv[0], childPids[i]);
+            fprintf(stdout, "%s: Child Pid %ld: continued\n", argv[0], childPids[i]);
         }
     }
 }
