@@ -62,7 +62,12 @@
 #include <getopt.h>
 #endif
 
-static int FAN_COUNT = 0;
+#ifndef CTYPES_H
+#define CTYPES_H
+#include <ctypes.h>
+#endif
+
+static int FAN_COUNT = -1;
 static int MAX_COMMAND_SIZE = 256;
 
 void handleOpts(int argc, char ** argv);
@@ -82,7 +87,11 @@ int main (int argc, char *argv[])
 void handleOpts(int argc, char ** argv) 
 {
     int ch;
-    while ((ch = getopt(argc, argv, "n::h")) != -1) 
+    if (argc < 3) {        
+        fprintf(stderr, "%s: Usage: -n [number of processes]\n", argv[0]);
+        exit(-1);
+    }
+    while ((ch = getopt(argc, argv, "n:h")) != -1) 
     {
         switch (ch)
         {
@@ -94,8 +103,16 @@ void handleOpts(int argc, char ** argv)
                 exit(0);
                 break;
             case '?':
+                if (optopt == 'n')
+                    fprintf(stderr, "Option -%c requires an argument [number of processes].\n", optopt);
+                else if (isprint(optopt))
+                    fprintf(stderr, "Unknown option '-%c'.\n", optopt);
+                else
+                    fprintf(stderr, "Unknown option character '\\x%x'.\n", optopt);
+                exit(-1);
             default:
                 perror("Unknown option selected");
+                exit(-1);
                 break;
         }
     }
