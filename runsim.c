@@ -67,54 +67,15 @@ static int MAX_COMMAND_SIZE = 256;
 
 void handleOpts(int argc, char ** argv);
 int * fanProcesses();
-void handleWaits (int * childPids);
-int main (int argc, char *argv[]) {
-  // Declare variables to be used in the rest of the program
-  pid_t cpid;
-  int shmId,*pr_current, childpid, status;
-  key_t key = 0;
-  char command[MAX_COMMAND_SIZE];
-  // Allocate shared memory to store the number of running processes
-  shmId = shmget(key, sizeof(int), IPC_CREAT | 0666);
-  pr_current = (int *) shmat( shmId, NULL, 0);
-  *pr_current = 0;
-  // Check for valid number of command-line arguments
-  handleOpts(argc, argv);
-  fanProcesses();
-  exit(0);
-  // Main loop
-  while (fgets(command, MAX_COMMAND_SIZE, stdin) != NULL) {
-    // Handle error
-    printf("%s", command);
-    childpid = fork();
-    if (childpid != 0) {
-      // In the parent process
-      *pr_current += 1;
-    } else {
-      // Child process
-      // Format command
-    }
-    // Check to make sure we do not have more than enough running processes
-    if ((*pr_current >= FAN_COUNT) & (childpid != 0)) {
-        cpid = waitpid(-1, &status, WUNTRACED | WCONTINUED);
-        *pr_current -= 1;
-        if (cpid == -1) {
-          perror("waitpid");
-          exit(EXIT_FAILURE);
-        }
-        if (WIFEXITED(status)) {
-          printf("exited, status=%d\n", WEXITSTATUS(status));
-        } else if (WIFSIGNALED(status)) {
-          printf("killed by signal %d\n", WTERMSIG(status));
-        } else if (WIFSTOPPED(status)) {
-          printf("stopped by signal %d\n", WSTOPSIG(status));
-        } else if (WIFCONTINUED(status)) {
-          printf("continued\n");
-        }
-      }
-  }
+void handleWaits (int * childPids, char ** argv);
 
-  return 0;
+int main (int argc, char *argv[]) 
+{
+    int * childPids;
+    handleOpts(argc, argv);
+    childPids = fanProcesses();
+    handleWaits(childPids, argv);
+    return 0;
 }
 
 void handleOpts(int argc, char ** argv) 
@@ -181,25 +142,26 @@ int * fanProcesses()
     }
     return childPids;
 }
-void handleWaits (int * childPids)
+void handleWaits (int * childPids, char ** argv)
 {
     pid_t cpid;
     int numberOfPids = sizeof(childPids)/sizeof(childPids[0]);
     for (int i = 0; i < numberOfPids; i++) 
     {
-        cpid = waitpid(-1, &status, WUNTRACED | WCONTINUED);
-        *pr_current -= 1;
+        cpid = waitpid(childPids[i], &status, WUNTRACED | WCONTINUED);
+        
         if (cpid == -1) {
             perror("waitpid");
             exit(EXIT_FAILURE);
         }
         if (WIFEXITED(status)) {
-            printf("exited, status=%d\n", status);
+            fprintf(stdout, "%s: Child Pid %d: exited, status=%d\n", argv[0], childPids[i], status);
         } else if (WIFSIGNALED(status)) {
-            printf("killed by signal %d\n", WTERMSIG(status));
+            fprintf(stderr, "%s: Error: Child Pid %d: killed by signal %d\n", argv[0], childPids[i], WTERMSIG(status));
         } else if (WIFSTOPPED(status)) {
-            printf("stopped by signal %d\n", WSTOPSIG(status));
+            fprintf(stderr, "%s: Error: Child Pid %d: stopped by signal %d\n",argv[0], childPids[i], WSTOPSIG(status));
         } else if (WIFCONTINUED(status)) {
-            printf("continued\n");
+            fprintf(stdout, "%s: Child Pid %d: continued\n", argv[0], childPids[i]);
         }
+    }
 }
