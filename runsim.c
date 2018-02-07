@@ -66,8 +66,8 @@ static int FAN_COUNT = 0;
 static int MAX_COMMAND_SIZE = 256;
 
 void handleOpts(int argc, char ** argv);
-void fanProcesses();
-
+int * fanProcesses();
+void handleWaits (int * childPids);
 int main (int argc, char *argv[]) {
   // Declare variables to be used in the rest of the program
   pid_t cpid;
@@ -113,21 +113,7 @@ int main (int argc, char *argv[]) {
         }
       }
   }
-  cpid = waitpid(-1, &status, WUNTRACED | WCONTINUED);
-  *pr_current -= 1;
-  if (cpid == -1) {
-    perror("waitpid");
-    exit(EXIT_FAILURE);
-  }
-  if (WIFEXITED(status)) {
-    printf("exited, status=%d\n", status);
-  } else if (WIFSIGNALED(status)) {
-    printf("killed by signal %d\n", WTERMSIG(status));
-  } else if (WIFSTOPPED(status)) {
-    printf("stopped by signal %d\n", WSTOPSIG(status));
-  } else if (WIFCONTINUED(status)) {
-    printf("continued\n");
-  }         
+
   return 0;
 }
 
@@ -160,12 +146,13 @@ void handleOpts(int argc, char ** argv)
     }
 }
 
-void fanProcesses() 
+int * fanProcesses() 
 {
     
     char commandBuffer[MAX_COMMAND_SIZE];
-    int childPids[FAN_COUNT], counter = 0;
-    
+    int * childPids, counter = 0;
+    childPids = (int *) malloc(sizeof(int) * FAN_COUNT);
+    memset(childPids, 0, (size_t) FAN_COUNT);
     while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL) 
     {
         childPids[counter] = fork();
@@ -192,4 +179,27 @@ void fanProcesses()
             counter += 1;
         }
     }
+    return childPids;
+}
+void handleWaits (int * childPids)
+{
+    pid_t cpid;
+    int numberOfPids = sizeof(childPids)/sizeof(childPids[0]);
+    for (int i = 0; i < numberOfPids; i++) 
+    {
+        cpid = waitpid(-1, &status, WUNTRACED | WCONTINUED);
+        *pr_current -= 1;
+        if (cpid == -1) {
+            perror("waitpid");
+            exit(EXIT_FAILURE);
+        }
+        if (WIFEXITED(status)) {
+            printf("exited, status=%d\n", status);
+        } else if (WIFSIGNALED(status)) {
+            printf("killed by signal %d\n", WTERMSIG(status));
+        } else if (WIFSTOPPED(status)) {
+            printf("stopped by signal %d\n", WSTOPSIG(status));
+        } else if (WIFCONTINUED(status)) {
+            printf("continued\n");
+        }
 }
