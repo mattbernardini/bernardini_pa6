@@ -184,19 +184,19 @@ void handleWaits (int * childPids, char ** argv)
         }
         else if (WIFEXITED(status) && !WEXITSTATUS(status))
         {
-            fprintf(stdout, "%s: Child Pid %ld: exited, status=%d\n", argv[0], childPids[i], status);
+            fprintf(stdout, "%s: Child Pid %ld: exited, status=%d\n", argv[0], (long) childPids[i], status);
         } 
         else if (WIFSIGNALED(status)) 
         {
-            fprintf(stderr, "%s: Error: Child Pid %ld: killed by signal %d\n", argv[0], childPids[i], WTERMSIG(status));
+            fprintf(stderr, "%s: Error: Child Pid %ld: killed by signal %d\n", argv[0], (long) childPids[i], WTERMSIG(status));
         } 
         else if (WIFSTOPPED(status)) 
         {
-            fprintf(stderr, "%s: Error: Child Pid %ld: stopped by signal %d\n",argv[0], childPids[i], WSTOPSIG(status));
+            fprintf(stderr, "%s: Error: Child Pid %ld: stopped by signal %d\n",argv[0], (long) childPids[i], WSTOPSIG(status));
         } 
         else if (WIFCONTINUED(status)) 
         {
-            fprintf(stdout, "%s: Child Pid %ld: continued\n", argv[0], childPids[i]);
+            fprintf(stdout, "%s: Child Pid %ld: continued\n", argv[0], (long) childPids[i]);
         }
     }
 }
