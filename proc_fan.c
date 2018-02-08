@@ -20,9 +20,9 @@
 #include <getopt.h>
 #include <ctype.h>
 
-static int FAN_COUNT = -1;
 static int MAX_COMMAND_SIZE = 256;
-static int PROCESSES_FANNED = 0;
+static int PROCESSES_ALIVE = 0;
+static int PROCESS_LIMIT = 0;
 
 void handleOpts(int argc, char ** argv);
 int * fanProcesses(char ** argv);
@@ -50,7 +50,7 @@ void handleOpts(int argc, char ** argv)
         switch (ch)
         {
             case 'n':
-                FAN_COUNT = atoi(optarg);
+                PROCESS_LIMIT = atoi(optarg);
                 break;
             case 'h':
                 fprintf(stderr, "%s: Usage: -n [number of processes] -h recieve this message\n", argv[0]);
@@ -80,7 +80,7 @@ void handleOpts(int argc, char ** argv)
                 break;
         }
     }
-    if (FAN_COUNT == -1) 
+    if (PROCESS_LIMIT == -1) 
     {
         fprintf(stderr, "%s: Usage: -n [number of processes] -h recieve this message\n", argv[0]);
         exit(-1);
@@ -92,17 +92,17 @@ int * fanProcesses(char ** argv)
     
     char commandBuffer[MAX_COMMAND_SIZE];
     int * childPids;
-    childPids = (int *) malloc(sizeof(int) * FAN_COUNT);
+    childPids = (int *) malloc(sizeof(int) * PROCESS_LIMIT);
     memset(childPids, 0, sizeof(&childPids));
-    while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL && PROCESSES_FANNED < FAN_COUNT) 
+    while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL) 
     {
-        childPids[PROCESSES_FANNED] = fork();
-        if (childPids[PROCESSES_FANNED] == -1) 
+        childPids[PROCESSES_ALIVE] = fork();
+        if (childPids[PROCESSES_ALIVE] == -1) 
         {
             fprintf(stderr, "%s: Error: failed to fork a child process.\n", argv[0]);
             perror((const char *)(long)errno);
         }
-        else if (childPids[PROCESSES_FANNED] == 0)
+        else if (childPids[PROCESSES_ALIVE] == 0)
         {
             // Child process
             char formattedCommand[MAX_COMMAND_SIZE];
@@ -118,7 +118,7 @@ int * fanProcesses(char ** argv)
         }
         else 
         {
-            PROCESSES_FANNED += 1;
+            PROCESSES_ALIVE += 1;
         }
     }
     return childPids;
@@ -128,7 +128,7 @@ void handleWaits (int * childPids, char ** argv)
     pid_t cpid;
     int *status;
     status = malloc(sizeof(int));
-    for (int i = 0; i < PROCESSES_FANNED; i++) 
+    for (int i = 0; i < PROCESSES_ALIVE; i++) 
     {
         while(((cpid = waitpid(childPids[i], status, 0)) == -1) &&
                     (errno == EINTR));

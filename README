@@ -1,0 +1,28 @@
+proc_fan
+testsim
+
+These programs are designed to work together.  Runsim.c creates proc_fan which is the creator process.
+Testsim.c creates the child processes that are forked from runsim and have a timer.  These are dummy
+processes simply ment to test the ability for a parent process to wait for a child.
+
+TO USE:
+
+./proc_fan -n [number of fans]
+./proc_fan -h shows help message
+
+EXAMPLE INVOCATION
+
+./proc_fan -n 20 < testing.data
+
+Requires:
+    A file with commands in it to process, assumes that each line starts with the name of the command,
+    and is followed by 2 numbers representing delays.  If there are any other commands past that they
+    will not be processed.  This also assumes that the command to run is in the current working 
+    directory.  If either the last 2 arguments are not numbers or the program the parent is trying to
+    run is not in the current working directory then it will fail.
+    
+    An example line in the file would be "testsim 5 10" without quotes.
+    
+    This file should pipe commands to stdin in order for it to properly process the commands.
+
+The exit status' are pulled from the system and do not nessecialrliy reflect the child exit status
