@@ -66,7 +66,7 @@
 #define CTYPES_H
 #include <ctype.h>
 #endif
-
+#include <stdatomic.h>
 static int FAN_COUNT = -1;
 static int MAX_COMMAND_SIZE = 256;
 static int PROCESSES_FANNED = 0;

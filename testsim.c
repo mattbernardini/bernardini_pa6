@@ -23,6 +23,5 @@ int main(int argc, char *argv[])
   while (n-- > 0)
     sleep(sec);
 
-  printf("Process ID = %d \n", getpid());
   return sec;
 }
