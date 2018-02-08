@@ -26,14 +26,13 @@ static int PROCESS_LIMIT = 0;
 
 void handleOpts(int argc, char ** argv);
 int * fanProcesses(char ** argv);
-void handleWaits (int * childPids, char ** argv);
+void handleWait (char ** argv);
 
 int main (int argc, char *argv[]) 
 {
     int * childPids;
     handleOpts(argc, argv);
     childPids = fanProcesses(argv);
-    handleWaits(childPids, argv);
     free(childPids);
     return 0;
 }
@@ -89,20 +88,19 @@ void handleOpts(int argc, char ** argv)
 
 int * fanProcesses(char ** argv) 
 {
-    
     char commandBuffer[MAX_COMMAND_SIZE];
-    int * childPids;
+    int * childPids, counter = 0;
     childPids = (int *) malloc(sizeof(int) * PROCESS_LIMIT);
     memset(childPids, 0, sizeof(&childPids));
     while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL) 
     {
-        childPids[PROCESSES_ALIVE] = fork();
-        if (childPids[PROCESSES_ALIVE] == -1) 
+        childPids[counter] = fork();
+        if (childPids[counter] == -1) 
         {
             fprintf(stderr, "%s: Error: failed to fork a child process.\n", argv[0]);
             perror((const char *)(long)errno);
         }
-        else if (childPids[PROCESSES_ALIVE] == 0)
+        else if (childPids[counter] == 0)
         {
             // Child process
             char formattedCommand[MAX_COMMAND_SIZE];
@@ -114,45 +112,47 @@ int * fanProcesses(char ** argv)
             char *length2 = strtok(NULL, " ");
             // Execute
             execl(formattedCommand, formattedCommand, length1, length2, (char*) NULL);
-            exit(42);
         }
         else 
         {
             PROCESSES_ALIVE += 1;
+            counter += 1;
+            if (PROCESSES_ALIVE >= PROCESS_LIMIT)
+            {
+                handleWait(argv);
+                PROCESSES_ALIVE -= 1;
+            }
         }
     }
     return childPids;
 }
-void handleWaits (int * childPids, char ** argv)
+void handleWait (char ** argv)
 {
     pid_t cpid;
     int *status;
     status = malloc(sizeof(int));
-    for (int i = 0; i < PROCESSES_ALIVE; i++) 
-    {
-        while(((cpid = waitpid(childPids[i], status, 0)) == -1) &&
-                    (errno == EINTR));
+    while(((cpid = waitpid(-1, status, 0)) == -1) &&
+            (errno == EINTR));
         
-        if (cpid == -1 && errno != EINTR) {
-            perror("Failed to wait for child");
-            exit(EXIT_FAILURE);
-        }
-        else if (WIFEXITED(*status))
-        {
-            fprintf(stdout, "%s: Child Pid %ld: exited, status=%d\n", argv[0], (long) childPids[i], *status);
-        } 
-        else if (WIFSIGNALED(*status)) 
-        {
-            fprintf(stderr, "%s: Error: Child Pid %ld: killed by signal %d\n", argv[0], (long) childPids[i], WTERMSIG(*status));
-        } 
-        else if (WIFSTOPPED(*status)) 
-        {
-            fprintf(stderr, "%s: Error: Child Pid %ld: stopped by signal %d\n",argv[0], (long) childPids[i], WSTOPSIG(*status));
-        } 
-        else if (WIFCONTINUED(status)) 
-        {
-            fprintf(stdout, "%s: Child Pid %ld: continued\n", argv[0], (long) childPids[i]);
-        }
+    if (cpid == -1 && errno != EINTR) {
+        perror("Failed to wait for child");
+        exit(EXIT_FAILURE);
+    }
+    else if (WIFEXITED(*status))
+    {
+        fprintf(stdout, "%s: Child Pid %ld: exited, status=%d\n", argv[0], (long) childPids[i], *status);
+    } 
+    else if (WIFSIGNALED(*status)) 
+    {
+        fprintf(stderr, "%s: Error: Child Pid %ld: killed by signal %d\n", argv[0], (long) childPids[i], WTERMSIG(*status));
+    } 
+    else if (WIFSTOPPED(*status)) 
+    {
+        fprintf(stderr, "%s: Error: Child Pid %ld: stopped by signal %d\n",argv[0], (long) childPids[i], WSTOPSIG(*status));
+    } 
+    else if (WIFCONTINUED(status)) 
+    {
+        fprintf(stdout, "%s: Child Pid %ld: continued\n", argv[0], (long) childPids[i]);
     }
     free(status);
 }
