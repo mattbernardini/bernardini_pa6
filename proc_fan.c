@@ -89,7 +89,7 @@ void handleOpts(int argc, char ** argv)
 int * fanProcesses(char ** argv) 
 {
     char commandBuffer[MAX_COMMAND_SIZE];
-    int * childPids, counter = 0;
+    int * childPids, counter = 0, currentChildPidSize = PROCESS_LIMIT;
     childPids = (int *) malloc(sizeof(int) * PROCESS_LIMIT);
     memset(childPids, 0, sizeof(&childPids));
     while(fgets(commandBuffer, MAX_COMMAND_SIZE, stdin) != NULL) 
@@ -117,12 +117,23 @@ int * fanProcesses(char ** argv)
         {
             PROCESSES_ALIVE += 1;
             counter += 1;
+            if (counter >= currentChildPidSize) 
+            {
+                // If we are in here our childPids array needs more memory
+               childPids = realloc(childPids, sizeof(int) * (counter * 2)); 
+               currentChildPidSize = 2 * counter;
+            }
             if (PROCESSES_ALIVE >= PROCESS_LIMIT)
             {
                 handleWait(argv);
                 PROCESSES_ALIVE -= 1;
             }
         }
+    }
+    while (PROCESSES_ALIVE > 0)
+    {
+        handleWait(argv);
+        PROCESSES_ALIVE -= 1; 
     }
     return childPids;
 }
@@ -140,19 +151,19 @@ void handleWait (char ** argv)
     }
     else if (WIFEXITED(*status))
     {
-        fprintf(stdout, "%s: Child Pid %ld: exited, status=%d\n", argv[0], (long) childPids[i], *status);
+        fprintf(stdout, "%s: Child Pid %ld: exited, status=%d\n", argv[0], (long) cpid, *status);
     } 
     else if (WIFSIGNALED(*status)) 
     {
-        fprintf(stderr, "%s: Error: Child Pid %ld: killed by signal %d\n", argv[0], (long) childPids[i], WTERMSIG(*status));
+        fprintf(stderr, "%s: Error: Child Pid %ld: killed by signal %d\n", argv[0], (long) cpid, WTERMSIG(*status));
     } 
     else if (WIFSTOPPED(*status)) 
     {
-        fprintf(stderr, "%s: Error: Child Pid %ld: stopped by signal %d\n",argv[0], (long) childPids[i], WSTOPSIG(*status));
+        fprintf(stderr, "%s: Error: Child Pid %ld: stopped by signal %d\n",argv[0], (long) cpid, WSTOPSIG(*status));
     } 
     else if (WIFCONTINUED(status)) 
     {
-        fprintf(stdout, "%s: Child Pid %ld: continued\n", argv[0], (long) childPids[i]);
+        fprintf(stdout, "%s: Child Pid %ld: continued\n", argv[0], (long) cpid);
     }
     free(status);
 }
